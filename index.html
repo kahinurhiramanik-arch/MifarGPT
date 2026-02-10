@@ -3,19 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MifarGPT Pro - Next Gen AI</title>
+    <title>MifarGPT Pro | Advanced AI</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
     <div class="app-container">
-        <aside class="sidebar">
-            <button class="new-chat-btn"><i class="fas fa-plus"></i> New Chat</button>
-            <div class="chat-history" id="historyList">
-                <p class="section-title">Recent History</p>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn"><i class="fas fa-plus"></i> New Chat</button>
+            </div>
+            
+            <div class="chat-history">
+                <p class="section-label">Recent History</p>
+                <div id="historyList">
+                    <div class="history-item"><i class="far fa-comment"></i> Welcome to MifarGPT</div>
                 </div>
-            <div class="auth-section">
+            </div>
+
+            <div class="sidebar-footer">
                 <button id="googleBtn" class="google-login-btn">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G">
                     Sign in with Google
@@ -24,33 +31,37 @@
         </aside>
 
         <main class="main-content">
-            <header class="top-header">
-                <div class="model-selector">
-                    <button class="mode-btn active" onclick="setMode('standard')">Standard</button>
-                    <button class="mode-btn" onclick="setMode('research')"><i class="fas fa-microscope"></i> Deep Research</button>
-                    <button class="mode-btn" onclick="setMode('study')"><i class="fas fa-graduation-cap"></i> Study Mode</button>
+            <header class="top-nav">
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="standard">Standard</button>
+                    <button class="mode-btn" data-mode="research"><i class="fas fa-microscope"></i> Research</button>
+                    <button class="mode-btn" data-mode="study"><i class="fas fa-graduation-cap"></i> Study</button>
                 </div>
             </header>
 
             <div class="chat-display" id="chatDisplay">
                 <div class="welcome-screen">
-                    <h1>MifarGPT</h1>
-                    <p>Experience the power of advanced AI models.</p>
+                    <div class="logo-icon">M</div>
+                    <h1>How can I help you today?</h1>
+                    <p>MifarGPT: Deep Thinking & Guided Learning Enabled.</p>
                 </div>
             </div>
 
-            <div class="input-area">
-                <div class="input-container-box">
-                    <div class="feature-pills">
-                        <span><i class="fas fa-bolt"></i> Guided Learning</span>
-                        <span><i class="fas fa-brain"></i> Deep Thinking</span>
+            <div class="input-section">
+                <div class="input-container">
+                    <div class="quick-actions">
+                        <span><i class="fas fa-lightbulb"></i> Deep Thinking</span>
+                        <span><i class="fas fa-book"></i> Guided Learning</span>
                     </div>
-                    <div class="input-wrapper">
+                    <div class="input-box-wrapper">
                         <textarea id="userInput" placeholder="Message MifarGPT..." rows="1"></textarea>
-                        <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
+                        <button id="sendBtn" class="send-button">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
                     </div>
                 </div>
-                <p class="footer-text">Built for precision. MifarGPT 2026.</p>
+                <p class="disclaimer">MifarGPT can make mistakes. Check important info.</p>
             </div>
         </main>
     </div>
