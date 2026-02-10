@@ -2,70 +2,329 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MifarGPT Pro | Advanced AI</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MifarGPT Pro | Advanced AI Interface</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* CSS স্টাইল - আপনার সাইটকে প্রিমিয়াম লুক দিবে */
+        :root {
+            --bg-dark: #09090b;
+            --sidebar-bg: #000000;
+            --card-dark: #18181b;
+            --accent-blue: #2563eb;
+            --text-white: #ffffff;
+            --text-gray: #a1a1aa;
+            --border-color: #27272a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar Design */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header { padding: 20px; }
+        .new-chat-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--card-dark);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .new-chat-btn:hover { background: #27272a; border-color: var(--accent-blue); }
+
+        .chat-history { flex: 1; overflow-y: auto; padding: 10px; }
+        .history-label { font-size: 11px; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; margin: 15px 10px 5px; }
+        .history-item {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-gray);
+        }
+        .history-item:hover { background: #18181b; color: white; }
+
+        .auth-footer { padding: 20px; border-top: 1px solid var(--border-color); }
+        .google-login {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-app {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Top Bar */
+        header {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mode-container { display: flex; gap: 8px; }
+        .mode-tag {
+            padding: 5px 12px;
+            background: #18181b;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+        .mode-tag.active { border-color: var(--accent-blue); color: white; background: #1e1e2e; }
+
+        /* Chat Display */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 10%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .welcome-center {
+            text-align: center;
+            margin-top: 15vh;
+        }
+        .welcome-center h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .welcome-center p { color: var(--text-gray); }
+
+        /* --- দ্য চ্যাট বার (Chatbar) --- */
+        .bottom-section {
+            padding: 20px 10%;
+            background: linear-gradient(transparent, var(--bg-dark) 30%);
+        }
+
+        .input-wrapper {
+            background: var(--card-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 10px 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .extra-tools {
+            display: flex;
+            gap: 15px;
+            padding: 5px 10px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #27272a;
+        }
+        .extra-tools span { font-size: 11px; color: var(--text-gray); cursor: pointer; }
+        .extra-tools span:hover { color: var(--accent-blue); }
+
+        .chat-input-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        #userInput {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            resize: none;
+            padding: 8px 0;
+            max-height: 150px;
+            min-height: 24px;
+        }
+
+        .send-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .send-btn:hover { transform: scale(1.1); background: #3b82f6; }
+
+        /* Message Bubbles */
+        .msg { max-width: 85%; padding: 12px 18px; border-radius: 18px; line-height: 1.6; font-size: 15px; }
+        .user-msg { align-self: flex-end; background: #2563eb; color: white; border-bottom-right-radius: 4px; }
+        .bot-msg { align-self: flex-start; background: #27272a; border-bottom-left-radius: 4px; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; left: -280px; height: 100%; }
+            .chat-container, .bottom-section { padding-left: 20px; padding-right: 20px; }
+            .welcome-center h1 { font-size: 1.8rem; }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <button class="new-chat-btn"><i class="fas fa-plus"></i> New Chat</button>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="new-chat-btn"><i class="fas fa-plus"></i> New Chat</button>
+        </div>
+        <div class="chat-history">
+            <p class="history-label">Today</p>
+            <div class="history-item"><i class="far fa-message"></i> How to build a bot</div>
+            <div class="history-item"><i class="far fa-message"></i> MifarGPT Capabilities</div>
+        </div>
+        <div class="auth-footer">
+            <button class="google-login">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="18" alt="G">
+                Continue with Google
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-app">
+        <header>
+            <div class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+            <div class="mode-container">
+                <div class="mode-tag active" onclick="changeMode(this, 'Standard')">Standard</div>
+                <div class="mode-tag" onclick="changeMode(this, 'Research')"><i class="fas fa-flask"></i> Deep Research</div>
+                <div class="mode-tag" onclick="changeMode(this, 'Study')"><i class="fas fa-book"></i> Study Mode</div>
             </div>
-            
-            <div class="chat-history">
-                <p class="section-label">Recent History</p>
-                <div id="historyList">
-                    <div class="history-item"><i class="far fa-comment"></i> Welcome to MifarGPT</div>
+            <div><i class="fas fa-ellipsis-v"></i></div>
+        </header>
+
+        <div class="chat-container" id="chatDisplay">
+            <div class="welcome-center" id="welcomeScreen">
+                <h1>MifarGPT <span style="color: #2563eb;">Pro</span></h1>
+                <p>Advanced AI system for Research, Coding, and Guided Learning.</p>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <div class="input-wrapper">
+                <div class="extra-tools">
+                    <span><i class="fas fa-paperclip"></i> Upload</span>
+                    <span><i class="fas fa-brain"></i> Deep Thinking</span>
+                    <span><i class="fas fa-graduation-cap"></i> Guided Learn</span>
+                </div>
+                <div class="chat-input-row">
+                    <textarea id="userInput" placeholder="Ask MifarGPT anything..." rows="1"></textarea>
+                    <button id="sendBtn" class="send-btn">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
                 </div>
             </div>
+            <p style="text-align:center; font-size:11px; color:#52525b; margin-top:10px;">
+                MifarGPT 2026 Edition. Powered by Gemini API.
+            </p>
+        </div>
+    </main>
 
-            <div class="sidebar-footer">
-                <button id="googleBtn" class="google-login-btn">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G">
-                    Sign in with Google
-                </button>
-            </div>
-        </aside>
+    <script>
+        // জাভাস্ক্রিপ্ট কোড - চ্যাটবার এবং মেসেজিং নিয়ন্ত্রণ করবে
+        const chatDisplay = document.getElementById('chatDisplay');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const welcomeScreen = document.getElementById('welcomeScreen');
 
-        <main class="main-content">
-            <header class="top-nav">
-                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-                <div class="mode-selector">
-                    <button class="mode-btn active" data-mode="standard">Standard</button>
-                    <button class="mode-btn" data-mode="research"><i class="fas fa-microscope"></i> Research</button>
-                    <button class="mode-btn" data-mode="study"><i class="fas fa-graduation-cap"></i> Study</button>
-                </div>
-            </header>
+        let currentActiveMode = 'Standard';
 
-            <div class="chat-display" id="chatDisplay">
-                <div class="welcome-screen">
-                    <div class="logo-icon">M</div>
-                    <h1>How can I help you today?</h1>
-                    <p>MifarGPT: Deep Thinking & Guided Learning Enabled.</p>
-                </div>
-            </div>
+        // অটো রিসাইজ টেক্সট এরিয়া
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
 
-            <div class="input-section">
-                <div class="input-container">
-                    <div class="quick-actions">
-                        <span><i class="fas fa-lightbulb"></i> Deep Thinking</span>
-                        <span><i class="fas fa-book"></i> Guided Learning</span>
-                    </div>
-                    <div class="input-box-wrapper">
-                        <textarea id="userInput" placeholder="Message MifarGPT..." rows="1"></textarea>
-                        <button id="sendBtn" class="send-button">
-                            <i class="fas fa-arrow-up"></i>
-                        </button>
-                    </div>
-                </div>
-                <p class="disclaimer">MifarGPT can make mistakes. Check important info.</p>
-            </div>
-        </main>
-    </div>
+        // মেসেজ পাঠানোর ফাংশন
+        function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
 
-    <script src="script.js"></script>
+            // ওয়েলকাম স্ক্রিন হাইড করা
+            if (welcomeScreen) welcomeScreen.style.display = 'none';
+
+            // ইউজারের মেসেজ যোগ করা
+            addMessage(text, 'user');
+            userInput.value = '';
+            userInput.style.height = 'auto';
+
+            // বোটের ফেক রিপ্লাই (API কানেক্ট করার আগ পর্যন্ত)
+            setTimeout(() => {
+                const botReply = `**[${currentActiveMode} Mode Active]**\nI have received your message: "${text}". \n\nTo enable real AI responses, we need to link your Gemini API Key in the next step!`;
+                addMessage(botReply, 'bot');
+            }, 1000);
+        }
+
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `msg ${sender}-msg`;
+            div.innerText = text;
+            chatDisplay.appendChild(div);
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function changeMode(element, mode) {
+            document.querySelectorAll('.mode-tag').forEach(tag => tag.classList.remove('active'));
+            element.classList.add('active');
+            currentActiveMode = mode;
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.left = sidebar.style.left === '0px' ? '-280px' : '0px';
+        }
+    </script>
 </body>
 </html>
